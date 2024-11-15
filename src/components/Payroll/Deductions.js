@@ -136,7 +136,7 @@ const Deductions = () => {
     }
     return activeFilters;
   };
-
+ 
   const removeFilter = (filter) => {
     if (filter.includes("Taxable")) {
       setFilterOptions((prev) => ({ ...prev, taxable: "" }));

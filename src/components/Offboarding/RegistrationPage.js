@@ -8,7 +8,7 @@ const ResignationPage = () => {
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("");
-
+ 
   const [data, setData] = useState([
     {
       id: 1,
@@ -49,10 +49,6 @@ const ResignationPage = () => {
     // Add more items as per your data
   ]);
 
-  {
-    /* For Create */
-  }
-
   const [showCreatePopup, setShowCreatePopup] = useState(false);
   const [newResignation, setNewResignation] = useState({
     name: "",
@@ -85,10 +81,6 @@ const ResignationPage = () => {
     setIsEditing(false);
     setNewResignation({ name: "", title: "", status: "Approved" });
   };
-
- // const handleCreateClick = () => {
-   // setShowCreatePopup(true);};
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -152,8 +144,7 @@ const ResignationPage = () => {
   return (
     <div className="resignation-letters">
       <div className="header">
-        <h1>Resignations</h1>
-
+        <h1 className="header-title">Resignations</h1>
         <div className="controls">
           <input
             type="text"

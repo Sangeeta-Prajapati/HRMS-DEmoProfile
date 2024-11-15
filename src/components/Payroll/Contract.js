@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  FaSearch,
   FaFilter,
   FaSortUp,
   FaSortDown,
@@ -522,13 +521,13 @@ const Contract = () => {
       <div className="header-container">
         <h2 className="header-title">CONTRACT</h2>
         <div className="header-right">
-          <div className="search-bar">
-            <FaSearch/>
             <input type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange}
-            style={{border : "none"}}
+            className="search-input"
             />
-          </div>
-          <FaFilter className="header-icon" title="Filter" onClick={handleFilterIconClick}/>
+          
+          <button className="filter-button" onClick={handleFilterIconClick}>
+          <FaFilter /> Filter
+          </button>
           <IoIosOptions className="header-icon" title="Group by" />
           <button className="action-button">Actions</button>
           <button className="create-button" onClick={handleCreateClick}>
@@ -538,7 +537,7 @@ const Contract = () => {
       </div>
 
      {/* Filter Popup */}
-     {showFilterPopup && (
+      {showFilterPopup && (
         <div className="filter-popup-overlay">
           <div className="filter-popup">
             <h2>Filter Contracts</h2>

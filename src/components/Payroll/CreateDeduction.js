@@ -78,7 +78,6 @@ const CreateDeduction = () => {
       <div className="create-allowance-container">
         <h2>Deduction </h2>
         <hr />
-
         <form>
           {/* Title and One-time date in one row */}
           <div className="form-row">

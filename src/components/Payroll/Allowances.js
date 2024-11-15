@@ -156,7 +156,7 @@ const Allowances = () => {
       <header className="allowances-header">
         <h2>Allowances</h2>
         <div className="controls">
-          <input
+          <input 
             type="text"
             placeholder="Search"
             value={searchTerm}
@@ -169,7 +169,7 @@ const Allowances = () => {
           >
             <FaList />
           </button>
-          <button
+          <button 
             className={`view-toggle ${view === "card" ? "active" : ""}`}
             onClick={() => setView("card")}
           >

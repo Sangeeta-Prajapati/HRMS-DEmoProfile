@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { FaTrash, FaEnvelope, FaFilter, FaPlus, FaDownload, FaTimes } from 'react-icons/fa';
 import './Payslips.css';
 import DatePicker from 'react-datepicker';
@@ -13,7 +13,7 @@ const Payslips = ({data} = []) => {
         // Add more data as needed
     ]);
 
-    const [showFilterModal, setShowFilterModal] = useState([]);
+    const [showFilterModal] = useState([]);
     const [filterCriteria, setFilterCriteria] = useState({
         startDate: '',  //
         endDate: '', //
@@ -42,7 +42,7 @@ const Payslips = ({data} = []) => {
         setFilterCriteria(prev => ({ ...prev, [field]: date }));
     };
 
-    const [selectedPayslips, setSelectedPayslips] = useState([]);
+    const [selectedPayslips] = useState([]);
     const [filterText, setFilterText] = useState('');
 
     const handleSelectAll = () => {
@@ -96,7 +96,18 @@ const Payslips = ({data} = []) => {
 
 
     const handleFilter = (e) => {
-        setFilterText(e.target.value);
+        const text = e.target.value
+        setFilterText(text)
+
+        const filteredData = payslips.filter(payslip =>
+            payslip.employee.toLowerCase().includes(text.toLowerCase()) ||
+            payslip.batch.toLowerCase().includes(text.toLowerCase()) ||
+            payslip.grossPay.toLowerCase().includes(text.toLowerCase()) ||
+            payslip.deduction.toLowerCase().includes(text.toLowerCase()) ||
+            payslip.netPay.toLowerCase().includes(text.toLowerCase())
+        );
+
+        setFilteredPayslips(filteredData);
     };
    
 
@@ -139,68 +150,68 @@ const saveNewPayslip = () => {
 };
 
 
-  const applyFilters = () => {
+
+const applyFilters = () => {
     let updatedData = [...payslips]; // Use payslips as the base data for filtering
 
-    // Debug: log initial data and filter criteria
-    console.log("Original Data:", payslips);
-    console.log("Filter Criteria:", filterCriteria);
+    // Ensure dates are in the correct format before comparison
+    const parseDate = (dateString) => {
+        const [day, month, year] = dateString.split("/").map(Number);
+        return new Date(year, month - 1, day);
+    };
 
     if (filterCriteria.startDate) {
-        updatedData = updatedData.filter(item => new Date(item.startDate) >= new Date(filterCriteria.startDate));
-        console.log("After startDate filter:", updatedData); // Debug log
+        updatedData = updatedData.filter(item => parseDate(item.startDate) >= filterCriteria.startDate);
     }
     if (filterCriteria.endDate) {
-        updatedData = updatedData.filter(item => new Date(item.endDate) <= new Date(filterCriteria.endDate));
-        console.log("After endDate filter:", updatedData); // Debug log
+        updatedData = updatedData.filter(item => parseDate(item.endDate) <= filterCriteria.endDate);
     }
+    if (filterCriteria.startDateFrom) {
+        updatedData = updatedData.filter(item => parseDate(item.startDate) >= filterCriteria.startDateFrom);
+    }
+    if (filterCriteria.startDateTill) {
+        updatedData = updatedData.filter(item => parseDate(item.startDate) <= filterCriteria.startDateTill);
+    }
+    if (filterCriteria.endDateFrom) {
+        updatedData = updatedData.filter(item => parseDate(item.endDate) >= filterCriteria.endDateFrom);
+    }
+    if (filterCriteria.endDateTill) {
+        updatedData = updatedData.filter(item => parseDate(item.endDate) <= filterCriteria.endDateTill);
+    }
+
+    // Additional filters for other fields
     if (filterCriteria.status) {
         updatedData = updatedData.filter(item => item.status === filterCriteria.status);
-        console.log("After status filter:", updatedData); // Debug log
     }
     if (filterCriteria.batch) {
         updatedData = updatedData.filter(item => item.batch === filterCriteria.batch);
-        console.log("After batch filter:", updatedData); // Debug log
     }
     if (filterCriteria.mailSent) {
         updatedData = updatedData.filter(item => item.mailSent === filterCriteria.mailSent);
-        console.log("After mailSent filter:", updatedData); // Debug log
     }
     if (filterCriteria.grossPayLessThan) {
         updatedData = updatedData.filter(item => parseFloat(item.grossPay.replace('ETB ', '')) <= parseFloat(filterCriteria.grossPayLessThan));
-        console.log("After grossPayLessThan filter:", updatedData); // Debug log
     }
     if (filterCriteria.grossPayGreaterOrEqual) {
         updatedData = updatedData.filter(item => parseFloat(item.grossPay.replace('ETB ', '')) >= parseFloat(filterCriteria.grossPayGreaterOrEqual));
-        console.log("After grossPayGreaterOrEqual filter:", updatedData); // Debug log
     }
     if (filterCriteria.deductionLessThan) {
         updatedData = updatedData.filter(item => parseFloat(item.deduction.replace('ETB ', '')) <= parseFloat(filterCriteria.deductionLessThan));
-        console.log("After deductionLessThan filter:", updatedData); // Debug log
     }
     if (filterCriteria.deductionGreaterOrEqual) {
         updatedData = updatedData.filter(item => parseFloat(item.deduction.replace('ETB ', '')) >= parseFloat(filterCriteria.deductionGreaterOrEqual));
-        console.log("After deductionGreaterOrEqual filter:", updatedData); // Debug log
     }
     if (filterCriteria.netPayLessThan) {
         updatedData = updatedData.filter(item => parseFloat(item.netPay.replace('ETB ', '')) <= parseFloat(filterCriteria.netPayLessThan));
-        console.log("After netPayLessThan filter:", updatedData); // Debug log
     }
     if (filterCriteria.netPayGreaterOrEqual) {
         updatedData = updatedData.filter(item => parseFloat(item.netPay.replace('ETB ', '')) >= parseFloat(filterCriteria.netPayGreaterOrEqual));
-        console.log("After netPayGreaterOrEqual filter:", updatedData); // Debug log
     }
 
-    setFilteredPayslips(updatedData); // 
-
-    // Debug: log final filtered data
-    console.log("Filtered Data to Show:", updatedData);
-
-  //  toggleFilterModal();
-  setIsFilterPopupOpen(false)  //updated
+    setFilteredPayslips(updatedData); // Update filtered data state
+    setIsFilterPopupOpen(false);  // Close the filter popup
 };
 
-    
 
   const resetFilters = () => {
     setFilterCriteria({
